@@ -1,0 +1,819 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  id       Int       @id(map: "Usu_pkey") @default(autoincrement())
+  dtinsert DateTime  @default(now())
+  name     String
+  email    String    @unique(map: "Usu_email_key")
+  password String
+  tipo     String
+  ativo    Boolean   @default(true)
+  dtdelete DateTime?
+}
+
+model ass {
+  cod                 Int
+  usua_cod            Int?
+  empresa             String?   @db.VarChar(60)
+  codforn             Int?
+  nome                String?   @db.VarChar(50)
+  apelido             String?   @db.VarChar(30)
+  senha               String?   @db.VarChar(15)
+  websenha            String?   @db.VarChar(15)
+  grupo               String?   @db.VarChar(1)
+  lembrar             Boolean?
+  lembrete            String?   @db.VarChar(100)
+  cargo               String?   @db.VarChar(10)
+  menu                String?   @db.VarChar(20)
+  telaini             String?   @db.VarChar(20)
+  monline             Boolean?
+  porcent             Decimal?  @db.Decimal(6, 2)
+  equipe              String?   @db.VarChar(1)
+  poderes             String?   @db.VarChar(255)
+  ramal               String?   @db.VarChar(13)
+  ativo               Boolean?
+  qemail              String?   @db.VarChar(50)
+  manut               String?   @db.VarChar(50)
+  quando              DateTime? @db.Timestamp(6)
+  filial              String?   @db.VarChar(50)
+  corR                Int
+  corG                Int
+  corB                Int
+  grupo2              Boolean
+  grupo2_porcen       Decimal?  @db.Decimal(6, 2)
+  grupo3              Boolean
+  grupo3_porcen       Decimal?  @db.Decimal(6, 2)
+  ger_reg             Boolean
+  ger_regM            Boolean
+  aux_reg             Boolean
+  b_manut             Boolean
+  dt_admiss           DateTime? @db.Timestamp(6)
+  dt_saida            DateTime? @db.Timestamp(6)
+  dt_limite           DateTime? @db.Timestamp(6)
+  cnpj                String?   @db.VarChar(18)
+  tec_resp            String?   @db.VarChar(50)
+  acompanha           Boolean
+  limite_emol         Decimal?  @db.Decimal(18, 2)
+  ativo_mais          Boolean
+  val_fixo            Decimal?  @db.Decimal(18, 2)
+  scanner             Boolean
+  cod_coor_resp       Int
+  medicao             Boolean
+  mapea               Boolean
+  emol_ped_terc       Boolean
+  sup_desenho         Boolean
+  crm                 String?   @db.VarChar(3)
+  desenho_pdf         Boolean
+  custos_cnpj         Boolean
+  HO                  Boolean
+  senha01             String?   @db.VarChar(15)
+  telefone01          String?   @db.VarChar(20)
+  telefone02          String?   @db.VarChar(20)
+  divulgar            Boolean
+  exibir              Boolean
+  ord_compra          Boolean
+  coor_bt_control     Boolean
+  mvc                 Boolean
+  cod_gerencia        Int?
+  acessibilidade      Boolean?
+  lib_fatu_sem_assist Boolean?
+  poder_aval_conform  Boolean?
+  x_ativo             Boolean?
+  codcargo            Int?
+  mvvm                Boolean?
+  usuexterno          Boolean?
+  valorhora           Decimal?  @db.Decimal(18, 2)
+  flag_dataretro      Boolean?
+  ativo_new           Boolean?
+  flag_app            Boolean?
+  flag_aux            Boolean?
+  id                  Int       @id @default(autoincrement())
+}
+
+model cad_conform {
+  id                 Int       @default(autoincrement())
+  cod                Int       @id
+  codimov            Int
+  codcfor            Int?
+  descr              String?   @db.VarChar(50)
+  doc                String?   @db.VarChar(30)
+  area               Decimal?  @db.Decimal(10, 2)
+  dt                 DateTime? @db.Timestamp(6)
+  dtvenc             DateTime? @db.Timestamp(6)
+  providencia        String?   @db.VarChar(50)
+  quando             DateTime? @db.Timestamp(6)
+  quem               String?   @db.VarChar(30)
+  grupo              String?   @db.VarChar(1)
+  dtaviso            DateTime? @db.Timestamp(6)
+  atividade          String?   @db.VarChar(30)
+  docscanv           Boolean?
+  docscani           Boolean?
+  qtdedoc            String?   @db.VarChar(1)
+  qlocal             String?   @db.VarChar(100)
+  f_internet         Boolean
+  terceiros          Boolean
+  cad                Boolean
+  arq_morto          Boolean
+  cnpj_conform       String?   @db.VarChar(18)
+  old_cnpj           String?   @db.VarChar(18)
+  periodocidade      String?   @db.VarChar(50)
+  grau_risco         String?   @db.VarChar(50)
+  obs                String?   @db.VarChar(254)
+  f_relatorio        Boolean
+  dt_renov           DateTime? @db.Date
+  f_obs              Boolean
+  cod_gp_depto       Int
+  v_grau_risco       Int
+  val_trib           Decimal?  @db.Decimal(18, 2)
+  doc_original       Boolean?
+  dt_doc_original    DateTime? @db.Timestamp(6)
+  codusu_doc_orig    Int?
+  doc_original_ok    Boolean?
+  dt_doc_original_ok DateTime? @db.Timestamp(6)
+  codusu_doc_orig_ok Int?
+  dt_ins             DateTime? @db.Timestamp(6)
+  doc_permanente     Boolean?
+  statusconform      Boolean?
+  dtstatusconform    DateTime? @db.Timestamp(6)
+  codstatusconform   Int?
+  orgao_publico      String?   @db.VarChar(50)
+  orientacao         String?   @db.VarChar(50)
+  gestao_cli         Boolean?
+  respons_terceiro   Boolean?
+  dt_recebe          DateTime? @db.Timestamp(6)
+  dt_input           DateTime? @db.Timestamp(6)
+  flag_tipopdf       Boolean?
+}
+
+model cad_contra {
+  id                Int          @default(autoincrement())
+  cod               Int          @id @unique
+  codcontra         Int?
+  codcli            Int?
+  codend            Int?
+  codserv           Int?
+  valserv           Decimal?     @db.Decimal(10, 2)
+  valameni          Decimal?     @db.Decimal(10, 2)
+  valconsult        Decimal?     @db.Decimal(10, 2)
+  valterceiro       Decimal?     @db.Decimal(10, 2)
+  valterceiroc      Decimal?     @db.Decimal(10, 2)
+  valterceirof      String?      @db.VarChar(30)
+  valterceirocp     String?      @db.VarChar(30)
+  valcopia          Decimal?     @db.Decimal(10, 2)
+  valcopiac         Decimal?     @db.Decimal(10, 2)
+  valcopiaf         String?      @db.VarChar(30)
+  valcopiacp        String?      @db.VarChar(30)
+  valdiversos       Decimal?     @db.Decimal(10, 2)
+  valdiversosc      Decimal?     @db.Decimal(10, 2)
+  valdiversosf      String?      @db.VarChar(30)
+  valdiversoscp     String?      @db.VarChar(30)
+  valbdi            Decimal?     @db.Decimal(10, 2)
+  valimposto        Decimal?     @db.Decimal(10, 2)
+  valdesconto       Decimal?     @db.Decimal(10, 2)
+  coordena          String?      @db.VarChar(50)
+  m_status          String?      @db.VarChar(15)
+  cobranca1         String?      @db.VarChar(50)
+  cobranca2         String?      @db.VarChar(50)
+  cobranca3         String?      @db.VarChar(50)
+  cobranca4         String?      @db.VarChar(50)
+  cobranca5         String?      @db.VarChar(50)
+  cobranca6         String?      @db.VarChar(50)
+  cobranca7         String?      @db.VarChar(50)
+  cobranca8         String?      @db.VarChar(50)
+  cobranca9         String?      @db.VarChar(50)
+  cobranca10        String?      @db.VarChar(50)
+  dtenv             DateTime?    @db.Date
+  codpedforn        Int?
+  novo              Boolean?
+  rescisao          Boolean?
+  suspenso          Boolean?
+  filtro_os         Boolean
+  rescival          Decimal?     @db.Decimal(10, 2)
+  rodapec           String?      @db.VarChar(100)
+  obsresci          String?      @db.VarChar(100)
+  desenhista        String?      @db.VarChar(50)
+  obs_serv          String?      @db.VarChar(50)
+  servnf            Boolean?
+  codcoor           Int?
+  codana            Int?
+  coddes            Int?
+  teventserv        Boolean?
+  teliminar         Boolean?
+  medicao           Boolean
+  preco2            Boolean
+  valorhora         Decimal      @db.Decimal(18, 2)
+  valorhora2        Decimal      @db.Decimal(18, 2)
+  horasvendidas     Int
+  horasvendidas2    Int
+  horasaditadas     Int
+  horasaditadas2    Int
+  acumulahoras      Int
+  acumulahoras2     Int
+  concluido         Boolean
+  revisao           Boolean
+  dt_limite         DateTime?    @db.Date
+  produto           String       @db.Char(1)
+  cod_serv          Int
+  num_processo      String?      @db.VarChar(50)
+  orgao_publico     String?      @db.VarChar(100)
+  cod_ana           Int
+  analista          String?      @db.VarChar(20)
+  cod_orgao         Int
+  ocorrok           Boolean
+  dt_pendenc        DateTime?    @db.Date
+  dt_fpendenc       DateTime?    @db.Date
+  pendencia         String?      @db.VarChar(250)
+  pendencia2        String?      @db.VarChar(250)
+  pendente          Boolean?
+  descservp         String?      @db.VarChar(50)
+  cod_quem_sup      Int
+  dt_conclui        DateTime?    @db.Date
+  quem_conclui      Int?
+  sinal             Boolean
+  dt_defer          DateTime?    @db.Date
+  dt_fatu_g3        DateTime?    @db.Date
+  nnf_g3            Decimal?     @db.Decimal(18, 0)
+  codaux_reg        Int?
+  process_rela      String?      @db.VarChar(20)
+  solicitado        String?      @db.VarChar(10)
+  aprovado          String?      @db.VarChar(10)
+  dt_limite2        DateTime?    @db.Date
+  fcnpj_outro       String?      @db.VarChar(18)
+  ht_arquiteto      Int
+  ht_consultor      Int
+  ht_desenhista     Int
+  dt_prazo_max_ac   DateTime?    @db.Date
+  ddescserv         String?      @db.VarChar(50)
+  cnpj_conform      String?      @db.VarChar(18)
+  o_compra_fatu     Boolean
+  o_compra_val      Decimal      @db.Decimal(18, 2)
+  o_compra_fatu1    Boolean
+  o_compra_val1     Decimal      @db.Decimal(18, 2)
+  o_compra_num      Int?
+  e_controle        String?      @db.VarChar(254)
+  val_trib          Decimal      @db.Decimal(18, 2)
+  medicao_export    Boolean
+  eliminado         Boolean?
+  codcoor2          Int?
+  codcoord_div      Int?
+  horasassessoria   Int?
+  horastramitacao   Int?
+  codtabpreco       String?      @db.VarChar(7)
+  codstatusocorr    Int?
+  dtmudastatusocorr DateTime?    @db.Date
+  codmudausuocorr   Int?
+  codtabcli         String?      @db.VarChar(10)
+  cadimov           cadimov?     @relation(fields: [codend], references: [cod])
+  folowup           folowup[]
+  pendencias        pendencias[]
+}
+
+model cad_rps {
+  rpsid        Int       @id
+  codUsu       Int?
+  dtGera       DateTime? @db.Timestamp(6)
+  ativo        Boolean?
+  numNFe       Decimal?  @db.Decimal(18, 0)
+  dtemiss      DateTime? @db.Timestamp(6)
+  codUsuFin    Int?
+  nfcancelada  Boolean?
+  dtCancela    DateTime? @db.Timestamp(6)
+  justificacao String?   @db.VarChar(250)
+  codId        Int?
+  folowup      folowup[]
+}
+
+model cadcli {
+  id                        Int       @default(autoincrement())
+  cod                       Int       @id @unique
+  tp_cli                    String?   @db.Char(1)
+  cod_hold                  Int?
+  cliente                   String?   @db.VarChar(67)
+  cliente_boleto            String?   @db.VarChar(40)
+  ck_cli_boleto             Boolean?  @default(false)
+  end_boleto                String?   @db.VarChar(40)
+  ck_end_boleto             Boolean?  @default(false)
+  fantasia                  String?   @db.VarChar(25)
+  logradouro                String?   @db.VarChar(10)
+  endereco                  String?   @db.VarChar(57)
+  end_comple                String?   @db.VarChar(100)
+  end_num                   Int?
+  cep                       String?   @db.VarChar(9)
+  bairro                    String?   @db.VarChar(50)
+  cidade                    String?   @db.VarChar(50)
+  uf                        String?   @db.VarChar(3)
+  regiao                    String?   @db.VarChar(10)
+  telefone                  String?   @db.VarChar(18)
+  cgc                       String?   @db.VarChar(18)
+  inscricao                 String?   @db.VarChar(16)
+  inscricaom                String?   @db.VarChar(16)
+  contato                   String?   @db.VarChar(40)
+  conttel                   String?   @db.VarChar(18)
+  contend                   String?   @db.VarChar(57)
+  telefone2                 String?   @db.VarChar(18)
+  telefone3                 String?   @db.VarChar(18)
+  fax                       String?   @db.VarChar(18)
+  c0email                   String?   @db.VarChar(50)
+  cemail                    String?   @db.VarChar(50)
+  atualiz_cl                DateTime? @db.Date
+  nomeatuc                  String?   @db.VarChar(3)
+  contato1                  String?   @db.VarChar(40)
+  conttel1                  String?   @db.VarChar(18)
+  contend1                  String?   @db.VarChar(57)
+  contato2                  String?   @db.VarChar(40)
+  conttel2                  String?   @db.VarChar(18)
+  contend2                  String?   @db.VarChar(57)
+  c1email                   String?   @db.VarChar(50)
+  obscli                    String?   @db.VarChar(57)
+  cor_nome                  String?   @db.VarChar(50)
+  cor_end                   String?   @db.VarChar(50)
+  cor_bairro                String?   @db.VarChar(20)
+  cor_cidade                String?   @db.VarChar(20)
+  cor_cep                   String?   @db.VarChar(18)
+  ccontat1                  String?   @db.VarChar(50)
+  ccontat2                  String?   @db.VarChar(50)
+  ccontattel1               String?   @db.VarChar(18)
+  ccontattel2               String?   @db.VarChar(18)
+  ccontatfax1               String?   @db.VarChar(18)
+  ccontatfax2               String?   @db.VarChar(18)
+  ccontatem0                String?   @db.VarChar(50)
+  ccontatem1                String?   @db.VarChar(50)
+  ccontatem2                String?   @db.VarChar(50)
+  cobs                      String?   @db.VarChar(254)
+  fnome                     String?   @db.VarChar(67)
+  flogra                    String?   @db.Char(3)
+  fend                      String?   @db.VarChar(60)
+  fendnum                   String?   @db.Char(10)
+  fendcompl                 String?   @db.Char(30)
+  fbairro                   String?   @db.VarChar(50)
+  fcidade                   String?   @db.Char(50)
+  fuf                       String?   @db.Char(10)
+  fcep                      String?   @db.VarChar(9)
+  fcnpj                     String?   @db.VarChar(20)
+  finscri                   String?   @db.VarChar(16)
+  finscmuni                 String?   @db.VarChar(15)
+  fcontato1                 String?   @db.VarChar(50)
+  fcontato2                 String?   @db.VarChar(50)
+  fcontato1t                String?   @db.VarChar(18)
+  fcontato2t                String?   @db.VarChar(18)
+  fcontato1f                String?   @db.VarChar(18)
+  fcontato2f                String?   @db.VarChar(18)
+  fcontato0em               String?   @db.VarChar(75)
+  fcontato1em               String?   @db.Char(50)
+  fcontato2em               String?   @db.VarChar(50)
+  fobs                      String?   @db.VarChar(254)
+  festado                   String?   @db.VarChar(50)
+  tipocnpj                  String?   @db.VarChar(1)
+  sss                       String?   @db.VarChar(10)
+  flagwww                   Boolean?  @default(false)
+  cli_lim_emol              Decimal?  @db.Decimal(18, 2)
+  ativo                     Boolean?  @default(false)
+  fcnpj_outro               String?   @db.VarChar(18)
+  cli_ref                   Boolean?  @default(false)
+  mostra_custos             Boolean?  @default(false)
+  aba_desenhos              Boolean?  @default(false)
+  u_aba_desenhos            Boolean?  @default(false)
+  u_aba_serv                Boolean?  @default(false)
+  u_aba_custos              Boolean?  @default(false)
+  u_aba_q_areas             Boolean?  @default(false)
+  u_aba_societario          Boolean?  @default(false)
+  f_rel_conform             Boolean?  @default(false)
+  ff_obs                    String?
+  flag_aval_geral           Boolean?  @default(false)
+  novo_cli                  Boolean?  @default(false)
+  log_especial              Boolean?  @default(false)
+  flag_efi                  Boolean?  @default(false)
+  flag_solic                Boolean?  @default(false)
+  val_max_tabfixa           Decimal?  @db.Decimal(18, 2)
+  ativo_export              Boolean?  @default(false)
+  export_radar              Boolean?  @default(false)
+  DtExpRadar                DateTime? @db.Date
+  cli_tipo_avalconf         Int?
+  def_grupo                 Int?
+  def_serv01                Int?
+  def_serv02                Int?
+  def_serv03                Int?
+  def_serv04                Int?
+  def_serv05                Int?
+  def_serv06                Int?
+  def_serv07                Int?
+  def_serv08                Int?
+  def_serv09                Int?
+  def_serv10                Int?
+  dep_qtde_serv             Int?
+  relatorio_esp_01          Boolean?  @default(false)
+  flag_aba_quadrosocietario Boolean?  @default(false)
+  flag_conf_naoseaplica     Boolean?  @default(false)
+  def_serv11                Int?
+  def_serv12                Int?
+  def_serv13                Int?
+  def_serv14                Int?
+  def_serv15                Int?
+  def_serv16                Int?
+  def_serv17                Int?
+  def_serv18                Int?
+  def_serv19                Int?
+  def_serv20                Int?
+  nire                      String?   @db.VarChar(15)
+  flag_rel_efic             Boolean?  @default(false)
+  cadimov                   cadimov[]
+}
+
+model cadimov {
+  id                  Int          @default(autoincrement())
+  cod                 Int          @id @unique
+  manut               Boolean?     @default(false)
+  codcli              Int
+  codloca             Int?
+  tipo                String?      @db.VarChar(50)
+  logradouro          String?      @db.VarChar(10)
+  endereco            String?      @db.VarChar(100)
+  end_num             Int?
+  bairro              String?      @db.VarChar(50)
+  end_comple          String?      @db.VarChar(100)
+  cidade              String?      @db.VarChar(50)
+  uf                  String?      @db.Char(2)
+  ufcc                String?      @db.VarChar(3)
+  regiao              String?      @db.VarChar(10)
+  cep                 String?      @db.VarChar(9)
+  obs                 String?      @db.VarChar(254)
+  proprietar          String?      @db.VarChar(50)
+  possuidor           String?      @db.VarChar(50)
+  regional            String?      @db.VarChar(50)
+  quadrafisc          String?      @db.VarChar(50)
+  areaexist           Decimal?     @db.Decimal(10, 2)
+  areaconstr          Decimal?     @db.Decimal(10, 2)
+  areareform          Decimal?     @db.Decimal(10, 2)
+  areademole          Decimal?     @db.Decimal(10, 2)
+  areatot             Decimal?     @db.Decimal(10, 2)
+  obscarac            String?      @db.VarChar(254)
+  email               String?      @db.VarChar(200)
+  tel                 String?      @db.VarChar(18)
+  cel                 String?      @db.VarChar(18)
+  fax                 String?      @db.VarChar(18)
+  contato             String?      @db.VarChar(50)
+  despmail            String?      @db.VarChar(30)
+  despfax             String?      @db.VarChar(18)
+  deaptel             String?      @db.VarChar(18)
+  despacha            String?      @db.VarChar(50)
+  catuso              String?      @db.VarChar(10)
+  zonaumun            String?      @db.VarChar(10)
+  zonauest            String?      @db.VarChar(10)
+  areaterrreno        Decimal      @db.Decimal(10, 2)
+  ncartri             String?      @db.VarChar(30)
+  nmat                String?      @db.VarChar(10)
+  nmat1               String?      @db.VarChar(10)
+  nmat2               String?      @db.VarChar(10)
+  nmat3               String?      @db.VarChar(10)
+  nmat4               String?      @db.VarChar(10)
+  atmunic             Boolean?     @default(false)
+  atestado            Boolean?     @default(false)
+  atuniao             Boolean?     @default(false)
+  pologt              Boolean?     @default(false)
+  aet                 Boolean?     @default(false)
+  largvias            Decimal?     @db.Decimal(10, 2)
+  apmana              Boolean?     @default(false)
+  apapp               Boolean?     @default(false)
+  apapa               Boolean?     @default(false)
+  melhora             String?      @db.VarChar(50)
+  opurba              Boolean?     @default(false)
+  equiptrans          Boolean?     @default(false)
+  equiptanq           Boolean?     @default(false)
+  avs                 Boolean?     @default(false)
+  areaexist1          Decimal?     @db.Decimal(10, 2)
+  areaescrit          Decimal?     @db.Decimal(10, 2)
+  areareal            Decimal?     @db.Decimal(10, 2)
+  fotoscan1           Boolean?     @default(false)
+  fotoscan2           Boolean?     @default(false)
+  stat                Boolean?     @default(false)
+  qlocal              String?      @db.VarChar(100)
+  grupoeconomico      String?      @db.VarChar(20)
+  codana              Int?
+  pendencias          String?      @db.VarChar(254)
+  grupo_imv           Int?
+  etiqueta            Int?         @db.SmallInt
+  grupo               String?      @db.Char(10)
+  imv_tipo            String?      @db.Char(1)
+  imv_tptransa        String?      @db.Char(1)
+  imv_ncontrib        String?      @db.VarChar(18)
+  imv_npavim          Decimal?     @db.Decimal(18, 0)
+  imv_EstCons         String?      @db.Char(1)
+  imv_EstacVagas      Decimal?     @db.Decimal(18, 0)
+  imv_MAcesso         String?      @db.VarChar(10)
+  imv_Desc            String?      @db.VarChar(100)
+  imv_CarcEsp         String?      @db.VarChar(100)
+  imv_QlEntorno       String?      @db.VarChar(100)
+  imv_Precov          Decimal?     @db.Decimal(18, 2)
+  imv_Precol          Decimal?     @db.Decimal(18, 2)
+  imv_SitPref         String?      @db.Char(1)
+  imv_PatriUni        String?      @db.Char(1)
+  imv_AutoConcl       Int?
+  imv_ViaTipo         String?      @db.Char(20)
+  imv_ViaLarg         Decimal?     @db.Decimal(18, 2)
+  imv_ViaEsqu         String?      @db.Char(1)
+  imv_Zoneam          String?      @db.Char(15)
+  imv_TxOcupa         String?      @db.Char(15)
+  imv_CoefAprov       String?      @db.Char(20)
+  imv_PubFachada      Decimal?     @db.Decimal(18, 2)
+  imv_PubTotem        Decimal?     @db.Decimal(18, 2)
+  imv_PubSemaf        String?      @db.Char(1)
+  imv_UsoPerm         String?      @db.Char(20)
+  imv_OBS             String?      @db.VarChar(254)
+  imv_codfun          Int?
+  imv_dtins           DateTime?    @db.Date
+  imv_locador         Int?
+  imv_nficha          Int
+  imv_PosRelLog       String?      @db.Char(1)
+  Imv_SitRelQua       String?      @db.Char(1)
+  Imv_Edif            String?      @db.Char(1)
+  Imv_AreaPresPerm    String?      @db.Char(1)
+  Imv_SerExiPrev      String?      @db.VarChar(100)
+  Imv_DescTipo        String?      @db.Char(1)
+  Imv_ArelUtil        Decimal?     @db.Decimal(18, 2)
+  ImvIdeAtribUniAval  Decimal?     @db.Decimal(18, 0)
+  Imv_CarFisIncli     String?      @db.Char(1)
+  Imv_DtRef           DateTime?    @db.Date
+  Imv_DtEfe           Decimal?     @db.Decimal(18, 0)
+  Imv_PadrAcab        String?      @db.VarChar(100)
+  Imv_LadDir          Decimal?     @db.Decimal(18, 2)
+  Imv_LadEsq          Decimal?     @db.Decimal(18, 2)
+  Imv_Fre             Decimal?     @db.Decimal(18, 2)
+  Imv_Fun             Decimal?     @db.Decimal(18, 2)
+  Imv_TipImv          String?      @db.Char(1)
+  Imv_AceDefFis       String?      @db.Char(1)
+  Imv_Outros          String?      @db.VarChar(20)
+  Imv_TransCol        String?      @db.Char(1)
+  Imv_OutrComRel      String?      @db.Char(1)
+  Imv_Edu             String?      @db.Char(1)
+  Imv_Laz             String?      @db.Char(1)
+  Imv_Com             String?      @db.Char(1)
+  Imv_Sau             String?      @db.Char(1)
+  Imv_Pav             String?      @db.Char(1)
+  Imv_RedBan          String?      @db.Char(1)
+  Imv_Gas             String?      @db.Char(1)
+  Imv_Infraoutr       String?      @db.VarChar(20)
+  ImvUPreCom          Boolean?     @default(false)
+  ImvUPreSer          Boolean?     @default(false)
+  ImvUPreInd          Boolean?     @default(false)
+  ImvUPreResid        Boolean?     @default(false)
+  ImvUPreMisto        Boolean?     @default(false)
+  ImvUPreResidm       Boolean?     @default(false)
+  Imv_Agua            Boolean?     @default(false)
+  Imv_EnerEle         Boolean?     @default(false)
+  Imv_GasCan          Boolean?     @default(false)
+  Imv_RedEsg          Boolean?     @default(false)
+  Imv_Tel             Boolean?     @default(false)
+  imv_usopermesp      Boolean?     @default(false)
+  imv_usopermCom      Boolean?     @default(false)
+  imv_usopermMisto    Boolean?     @default(false)
+  imv_usopermResid    Boolean?     @default(false)
+  imv_usopermuInd     Boolean?     @default(false)
+  imv_usopermSer      Boolean?     @default(false)
+  imv_EstacTerc       Boolean?     @default(false)
+  imv_EstacLVg        Boolean?     @default(false)
+  imv_japago          Boolean?     @default(false)
+  imv_dt_manut        DateTime?    @db.Date
+  imv_dt_valid        DateTime?    @db.Date
+  flagwww             Boolean?     @default(false)
+  imv_status          String?      @db.VarChar(20)
+  longitude           Decimal?     @db.Decimal(18, 12)
+  latitude            Decimal?     @db.Decimal(18, 12)
+  dtinput             DateTime?    @db.Date
+  dt_atualiz          DateTime?    @db.Date
+  cod_ana_atual       Int?
+  cod_atividade       Int?
+  m_cont_nome         String?      @db.VarChar(60)
+  m_cont_end          String?      @db.VarChar(100)
+  m_cont_num          String?      @db.VarChar(6)
+  m_cont_bairro       String?      @db.VarChar(50)
+  m_cont_cidade       String?      @db.VarChar(50)
+  m_cont_uf           String?      @db.Char(2)
+  m_cont_cep          String?      @db.VarChar(9)
+  m_cont_ddd          String?      @db.Char(3)
+  m_cont_tel          String?      @db.Char(20)
+  m_cont_obs          String?      @db.VarChar(254)
+  m_cont_estado       String?      @db.VarChar(30)
+  imv_projaprov       Boolean?     @default(false)
+  imv_levanta         Boolean?     @default(false)
+  imv_matricula       Boolean?     @default(false)
+  imv_iptu            Boolean?     @default(false)
+  m_cont_tipo         String?      @db.Char(1)
+  imv_ativo           Boolean?     @default(false)
+  imv_PrecoLuva       Decimal?     @db.Decimal(18, 2)
+  web                 Boolean?     @default(false)
+  QA_permitido_to     Decimal?     @db.Decimal(18, 2)
+  QA_permitido_ca     Decimal?     @db.Decimal(18, 2)
+  QA_habitese_to      Decimal?     @db.Decimal(18, 2)
+  QA_habitese_ca      Decimal?     @db.Decimal(18, 2)
+  QA_real_to          Decimal?     @db.Decimal(18, 2)
+  QA_real_ca          Decimal?     @db.Decimal(18, 2)
+  QA_T_aprov1         Decimal?     @db.Decimal(18, 2)
+  QA_T_aprov2         Decimal?     @db.Decimal(18, 2)
+  QAObs               String?
+  cod_aux_tmp         Int?
+  tipo_inc_tmp        String?      @db.VarChar(3)
+  cod_prod            Int?
+  cod_pai             Int
+  uni_saneado         Boolean?     @default(false)
+  uni_dt_saneado      DateTime?    @db.Date
+  uni_codusu_sanea    Int?
+  uni_revisado        Boolean?     @default(false)
+  uni_dt_revisado     DateTime?    @db.Date
+  uni_codusu_revisado Int?
+  status_critico      Boolean?     @default(false)
+  coddivsp            Int?
+  cnpj                String?      @db.VarChar(18)
+  dtinaugura          DateTime?    @db.Date
+  ccm                 String?      @db.VarChar(25)
+  inscr_estadual      String?      @db.VarChar(25)
+  diagnostico         String?
+  flag_aba_diag       Boolean?     @default(false)
+  nome_fluxograma     String?      @db.VarChar(50)
+  flag_aba_fluxog     Boolean?     @default(false)
+  nome_linhatempo     String?      @db.VarChar(50)
+  flag_aba_linhatempo Boolean?     @default(false)
+  cad_contra          cad_contra[]
+  cadcli              cadcli       @relation(fields: [codcli], references: [cod], onDelete: NoAction, onUpdate: NoAction, map: "cadcli_ref")
+  folowup             folowup[]
+}
+
+model contratos {
+  id             Int       @default(autoincrement())
+  cod            Int       @id
+  codcli         Int?
+  coordena       String?   @db.VarChar(50)
+  entregue       Boolean?  @default(false)
+  dtcontrato     DateTime? @db.Date
+  contratada     String?   @db.VarChar(50)
+  codorca        String?   @db.VarChar(11)
+  rodape         String?   @db.VarChar(100)
+  prazopag       String?   @db.VarChar(50)
+  indice         String?   @db.VarChar(10)
+  dt_contra      DateTime? @db.Date
+  codcoor        Int?
+  divisao        String?   @db.VarChar(50)
+  medicao_export Boolean?  @default(false)
+  export_radar   Boolean?  @default(false)
+  DtExpRadar     DateTime? @db.Date
+  codassist      Int?
+  codcoord2      Int?
+  codend         Int?
+  IndiceID       Int?
+  ValReajuste    Decimal?  @db.Decimal(18, 2)
+  DtReajustado   DateTime? @db.Date
+}
+
+model folowup {
+  id                Int        @default(autoincrement())
+  cod               Int        @id @unique
+  contrato          Int?       @default(0)
+  atribui           Boolean?   @default(false)
+  atribuid          Boolean?   @default(false)
+  analista          String?    @db.VarChar(50)
+  desenhista        String?    @default(" ") @db.VarChar(50)
+  dttarefa          DateTime?  @db.Date
+  te                Int?       @default(0)
+  tead              Int?       @default(0)
+  descserv          String?    @db.VarChar(50)
+  desctarefa        String?    @db.VarChar(99)
+  evento            String?    @db.VarChar(20)
+  conclusao         Boolean    @default(false)
+  conclusaod        Boolean?   @default(false)
+  ta                Int?       @default(0)
+  tades             Int?       @default(0)
+  orgao             String?    @db.VarChar(50)
+  fatura_ger_aux    Boolean    @default(false)
+  fatura_ger        Boolean    @default(false)
+  dt_ger_fat        DateTime?  @db.Date
+  fatura_sup        Boolean    @default(false)
+  dt_sup_fat        DateTime?  @db.Date
+  faturado          Boolean?   @default(false)
+  faturaok          Boolean?   @default(false)
+  fatura            Boolean?   @default(false)
+  porcen            Decimal?   @default(0.00) @db.Decimal(18, 2)
+  codend            Int        @default(0)
+  codserv           Int?       @default(0)
+  codgtaref         Int?       @default(0)
+  codtaref          Int?       @default(0)
+  coditaref         Int?       @default(0)
+  codsequenc        Int?       @default(0)
+  codcli            Int        @default(0)
+  tevento           Boolean?   @default(false)
+  codccontra        Int        @default(0)
+  nfacao            Boolean?   @default(false)
+  nnf               Decimal?   @default(0)
+  nboleto           Int?       @default(0)
+  codbanco          Int?       @default(0)
+  vcobra            Decimal?   @default(0.00) @db.Decimal(18, 2)
+  nfok              Boolean?   @default(false)
+  boletook          Boolean?   @default(false)
+  descadnf          String?    @db.VarChar(15)
+  dtconclui         DateTime?  @db.Date
+  dtemiss           DateTime?  @db.Date
+  dtliqui           DateTime?  @db.Date
+  pago              Boolean?   @default(false)
+  pagod             Boolean?   @default(false)
+  nlanc             Int?       @default(0)
+  nlancd            Int?       @default(0)
+  obs_serv          String?    @default(" ") @db.VarChar(50)
+  dtvenc            DateTime?  @db.Date
+  dtprev            DateTime?  @db.Date
+  temir             Boolean?   @default(false)
+  temir1            Boolean?   @default(false)
+  coordena          String?    @db.VarChar(50)
+  supervisor        String?    @db.VarChar(50)
+  ana_3             String?    @db.VarChar(20)
+  codana3           Int?       @default(0)
+  grupo3            Boolean    @default(false)
+  codcoor           Int?       @default(0)
+  codcoor_reg       Int?       @default(0)
+  codsup            Int?       @default(0)
+  codana            Int?       @default(0)
+  coddes            Int?       @default(0)
+  divisao           String?    @db.VarChar(50)
+  supdes            String?    @db.VarChar(50)
+  codsupdes         Int        @default(0)
+  medicao           Boolean    @default(false)
+  preco2            Boolean    @default(false)
+  val_ana           Decimal?   @default(0.00) @db.Decimal(18, 2)
+  val_anaG2         Decimal?   @default(0.00) @db.Decimal(18, 2)
+  val_grp3          Decimal?   @default(0.00) @db.Decimal(18, 2)
+  val_des           Decimal?   @default(0.00) @db.Decimal(18, 2)
+  val_coor          Decimal?   @default(0.00) @db.Decimal(18, 2)
+  val_coor_reg      Decimal?   @default(0.00) @db.Decimal(18, 2)
+  val_sup           Decimal?   @default(0.00) @db.Decimal(18, 2)
+  val_supdes        Decimal?   @default(0.00) @db.Decimal(18, 2)
+  finanBox          Boolean    @default(false)
+  reajuste          Decimal?   @default(1) @db.Decimal(18, 4)
+  val_anaG2x        Decimal?   @default(0.00) @db.Decimal(18, 2)
+  acompanha         Boolean    @default(false)
+  cod_acompanha     Int?       @default(0)
+  catg_valmed_old   String     @default("A") @db.Char(1)
+  obs_fatu          String?    @db.VarChar(200)
+  val_fix_ana       Decimal    @default(0) @db.Decimal(18, 2)
+  val_fix_ger_reg   Decimal?   @default(0) @db.Decimal(18, 2)
+  val_fix_aux_reg   Decimal?   @default(0) @db.Decimal(18, 2)
+  codaux_reg        Int?       @default(0)
+  val_aux_reg       Decimal?   @default(0.00) @db.Decimal(18, 2)
+  catg_valmed       String     @default("A ") @db.Char(2)
+  tedes             Int?       @default(0)
+  dtconcluid        DateTime?  @db.Date
+  dt_ins_tarefa     DateTime   @default(now())
+  faturafixa        Boolean    @default(false)
+  val_faturafixa    Decimal    @default(0.00) @db.Decimal(18, 2)
+  faturafixa_ok     Boolean    @default(false)
+  dt_faturafixa_ok  DateTime?  @db.Date
+  faturafixa_ok_aux Boolean    @default(false)
+  coordena2         String?    @db.VarChar(50)
+  codcoor2          Int?       @default(0)
+  valcoor2          Decimal?   @default(0.00) @db.Decimal(18, 2)
+  teassessoria      Int?       @default(0)
+  tetramitacao      Int?       @default(0)
+  taassessoria      Int?       @default(0)
+  tatramitacao      Int?       @default(0)
+  codcoor_old       Int?       @default(0)
+  env_finan         Boolean    @default(false)
+  dtEnvFinan        DateTime?  @db.Date
+  codRPS            Int?       @default(0)
+  okRPSFinan        Boolean    @default(false)
+  reajustar         Boolean    @default(false)
+  teste             Boolean    @default(false)
+  selLinhaRPS       Boolean    @default(false)
+  salvaLinhaRPS     Boolean    @default(false)
+  finanNFeRps       Boolean    @default(false)
+  valor_pago_rps    Decimal?   @default(0.00) @db.Decimal(18, 2)
+  codId             Int?       @default(0)
+  cad_contra        cad_contra @relation(fields: [codccontra], references: [cod], onDelete: NoAction, onUpdate: NoAction, map: "cad_contra_ref")
+  cadimov           cadimov    @relation(fields: [codend], references: [cod], onDelete: NoAction, onUpdate: NoAction, map: "cad_imov_ref")
+  cad_rps           cad_rps?   @relation(fields: [codRPS], references: [rpsid], onDelete: NoAction, onUpdate: NoAction, map: "cad_rps_ref")
+}
+
+model pendencias {
+  id               Int         @id @default(autoincrement())
+  cod              Int         @unique
+  codccontra       Int
+  descservp        String?     @db.VarChar(50)
+  dt_pendenc       DateTime    @db.Date
+  dt_fpendenc      DateTime?   @db.Date
+  pendencia        String?     @db.VarChar(250)
+  pendencia2       String?     @db.VarChar(250)
+  sinal            Boolean
+  cod_quem_sup     Int
+  pendente         Boolean
+  grupo            String?     @db.VarChar(50)
+  cod_quem_desp    Int
+  cod_compete_pend Int?
+  dt_prov          DateTime?   @db.Date
+  justifica        String?     @db.VarChar(250)
+  cad_contraCod    Int?
+  cad_contra       cad_contra? @relation(fields: [cad_contraCod], references: [cod])
+
+  @@index([codccontra])
+}
