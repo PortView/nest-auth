@@ -18,7 +18,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "deploy": "git pull && npm install && next build && pm2 delete all && pm2 start npm --name \"nest-auth\" -- run start:prod"
+    "deploy": "git pull && npm install && next build && /usr/local/bin/pm2 reload all"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
