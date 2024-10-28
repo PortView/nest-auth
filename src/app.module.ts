@@ -6,9 +6,10 @@ import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { UserModule } from './user/user.module';
 import { DbModule } from './db/db.module';
+import { GerClientesModule } from './ger_clientes/ger_clientes.module';
 
 @Module({
-  imports: [DbModule, UserModule, AuthModule],
+  imports: [DbModule, UserModule, AuthModule, GerClientesModule],
   controllers: [AppController],
 
   providers: [
