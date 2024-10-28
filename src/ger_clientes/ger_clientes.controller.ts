@@ -9,7 +9,7 @@ export class GerClientesController {
 
     @Get('olaMundo')
     async olaMundo(): Promise<{ message: string }> {
-        return { message: "Olá mundo versão 00017 !" };
+        return { message: "Olá mundo versão 00018 !" };
     }
 
     @Get('conformidades')
