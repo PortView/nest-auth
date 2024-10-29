@@ -18,7 +18,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "deploy": "git pull && sleep 15 && /usr/local/bin/pm2 reload all"
+    "deploy": "git pull && npm install && sleep 10 && /usr/local/bin/pm2 reload all"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
