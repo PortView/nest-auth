@@ -30,4 +30,21 @@ export class UserService {
   findByEmail(email: string) {
     return this.prisma.user.findUnique({ where: { email } });
   }
+
+  // async getCodForUser(id: number) {
+  //   return await this.prisma.user.findUnique({ where: { id } });
+  // }
+
+  async getCodForUser(id: number): Promise<{ cod: number | null, mvvm: string | null, codcargo: number | null, }> {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+      include: { ass: true }
+    });
+
+    return {
+      cod: user ? user.cod : null,
+      mvvm: user && user.ass ? String(user.ass.mvvm) : null,
+      codcargo: user && user.ass ? Number(user.ass.codcargo) : null,
+    };
+  }
 }

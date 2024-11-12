@@ -1,5 +1,6 @@
-export class UserFromJwt {
+export interface UserFromJwt {
     id: number;
     email: string;
     name: string;
+    cod: number;
 }

@@ -12,17 +12,34 @@ import { user } from '@prisma/client';
 export class UserController {
   constructor(private readonly userService: UserService) { }
   @ApiTags('user')
-  @IsPublic()
-  @Post()
+
+  //@IsPublic()
   @ApiBearerAuth()
+  @Post('cadastro')
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
 
-  @ApiTags('user')
+  //@ApiTags('user')
   @ApiBearerAuth()
   @Get('me')
-  getMe(@CurrentUser() user: user) {
-    return user;
+  async getMe(@CurrentUser() user: user) {
+    //return user;
+    //const cod = await this.userService.getCodForUser(user.id) || 'defaultCodValue';
+    const { cod, mvvm, codcargo } = await this.userService.getCodForUser(user.id) || { cod: 'defaultCodValue', mvvm: null };
+    return {
+      ...user,
+      cod: cod,
+      mvvm: mvvm,
+      codcargo: codcargo,
+
+    }
+    // return {
+    //   id: user.id,
+    //   email: user.email,
+    //   name: user.name,
+    //   cod: typeof cod === 'string' ? cod : cod.cod,
+    // };
   }
+
 }

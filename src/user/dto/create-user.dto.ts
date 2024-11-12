@@ -2,15 +2,17 @@ import { User } from '../entities/user.entity';
 import {
     IsEmail,
     IsString,
+    IsNumber,
     Matches,
     MaxLength,
     MinLength,
+    isNumber,
 } from 'class-validator';
 
 export class CreateUserDto extends User {
 
     /**
-   * O e-mail é necessário apra o login, mas não necessariamente precisa ser o mesmo e-mail da
+   * O e-mail é necessário para o login, mas não necessariamente precisa ser o mesmo e-mail da
    * rede social que estiver conectada. Login sem rede social precisa de uma senha.
    * @example email@email.com
    */
@@ -39,8 +41,9 @@ export class CreateUserDto extends User {
     @IsString()
     name: string;
 
-
-
     @IsString()
     tipo: string;
+
+    @IsNumber()
+    cod: number;
 }

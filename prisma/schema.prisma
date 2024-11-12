@@ -16,10 +16,14 @@ model user {
   tipo     String
   ativo    Boolean   @default(true)
   dtdelete DateTime?
+  cod      Int?      @default(110)
+  ass      ass?      @relation(fields: [cod], references: [cod], onDelete: NoAction, onUpdate: NoAction, map: "ass_ref")
+
+  @@index([cod], map: "fki_ass_ref")
 }
 
 model ass {
-  cod                 Int
+  cod                 Int       @unique(map: "cod_idc")
   usua_cod            Int?
   empresa             String?   @db.VarChar(60)
   codforn             Int?
@@ -95,6 +99,7 @@ model ass {
   flag_app            Boolean?
   flag_aux            Boolean?
   id                  Int       @id @default(autoincrement())
+  user                user[]
 }
 
 model cad_conform {
