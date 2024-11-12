@@ -24,22 +24,14 @@ export class UserController {
   @ApiBearerAuth()
   @Get('me')
   async getMe(@CurrentUser() user: user) {
-    //return user;
-    //const cod = await this.userService.getCodForUser(user.id) || 'defaultCodValue';
+
     const { cod, mvvm, codcargo } = await this.userService.getCodForUser(user.id) || { cod: 'defaultCodValue', mvvm: null };
     return {
       ...user,
       cod: cod,
       mvvm: mvvm,
       codcargo: codcargo,
-
     }
-    // return {
-    //   id: user.id,
-    //   email: user.email,
-    //   name: user.name,
-    //   cod: typeof cod === 'string' ? cod : cod.cod,
-    // };
   }
 
 }
