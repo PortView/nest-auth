@@ -25,10 +25,11 @@ export class UserController {
   @Get('me')
   async getMe(@CurrentUser() user: user) {
 
-    const { cod, mvvm, codcargo } = await this.userService.getCodForUser(user.id) || { cod: 'defaultCodValue', mvvm: null };
+    const { cod, tipo, mvvm, codcargo } = await this.userService.getCodForUser(user.id) || { cod: 'defaultCodValue', mvvm: null };
     return {
       ...user,
       cod: cod,
+      tipo: tipo,
       mvvm: mvvm,
       codcargo: codcargo,
     }

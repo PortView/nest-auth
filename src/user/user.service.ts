@@ -35,7 +35,7 @@ export class UserService {
   //   return await this.prisma.user.findUnique({ where: { id } });
   // }
 
-  async getCodForUser(id: number): Promise<{ cod: number | null, mvvm: string | null, codcargo: number | null, }> {
+  async getCodForUser(id: number): Promise<{ cod: number | null, tipo: string | null, mvvm: string | null, codcargo: number | null, }> {
     const user = await this.prisma.user.findUnique({
       where: { id },
       include: { ass: true }
@@ -43,6 +43,7 @@ export class UserService {
 
     return {
       cod: user ? user.cod : null,
+      tipo: user ? user.tipo : null,
       mvvm: user && user.ass ? String(user.ass.mvvm) : null,
       codcargo: user && user.ass ? Number(user.ass.codcargo) : null,
     };
