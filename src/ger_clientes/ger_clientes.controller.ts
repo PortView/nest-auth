@@ -56,13 +56,14 @@ export class GerClientesController {
     }
 
     @Get('unidades')
-    async getUnidades(@Query('codcoor') codcoor: string, @Query('uf') uf: string, @Query('codcli') codcli: string) {
+    async getUnidades(@Query('codcoor') codcoor: string, @Query('uf') uf: string, @Query('codcli') codcli: string, @Query('page') page: string) {
         const codcoorNumber = parseInt(codcoor, 10);
         const codcliNumber = parseInt(codcli, 10);
+        const pageNumber = parseInt(page, 10);
         if (isNaN(codcoorNumber) || !uf || isNaN(codcliNumber)) {
             throw new Error('Invalid parameters');
         }
-        return this.gerClientesService.getUnidadesByCodcoorAndUf(codcoorNumber, uf, codcliNumber);
+        return this.gerClientesService.getUnidadesByCodcoorAndUf(codcoorNumber, uf, codcliNumber, pageNumber);
     }
     @Get('servicos')
     async getServicosGerenteUnidadeFiltros(

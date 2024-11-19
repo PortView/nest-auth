@@ -249,16 +249,35 @@ export class GerClientesService {
         return uniqueResults;
     }
 
-    async getUnidadesByCodcoorAndUf(codcoor: number, uf: string, codcli: number) {
-        //console.log(`Fetching folowup records for codcoor: ${codcoor}, uf: ${uf}, codend: ${codcli}`);
-        const folowups = await this.prisma.folowup.findMany({
-            where: {
-                codcoor: codcoor,
-                codcli: codcli,
-                cadimov: {
-                    uf: uf,
-                },
+    async getUnidadesByCodcoorAndUf(codcoor: number, uf: string, codcli: number, page: number = 1): Promise<any> {
+        const whereClause: any = {
+            codcoor: codcoor,
+            codcli: codcli,
+            cadimov: {},
+        };
+
+        if (uf !== 'ZZ') {
+            whereClause.cadimov.uf = uf;
+        }
+
+        const itemsPerPage = 100;
+        const skip = (page - 1) * itemsPerPage;
+
+        // Consulta para obter os registros distintos de codend
+        const distinctCodend = await this.prisma.folowup.findMany({
+            where: whereClause,
+            select: {
+                codend: true,
             },
+            distinct: ['codend'],
+        });
+
+        // Contar o número total de registros distintos
+        const totalCount = distinctCodend.length;
+
+        // Consulta para obter os registros paginados
+        const folowups = await this.prisma.folowup.findMany({
+            where: whereClause,
             select: {
                 contrato: true,
                 codend: true,
@@ -273,27 +292,23 @@ export class GerClientesService {
                     tipo: 'asc',
                 },
             },
+            distinct: ['codend'],
+            take: itemsPerPage,
+            skip: skip,
         });
 
-        //console.log('Folowup records:', folowups);
-        // Remover duplicatas de 'tipo'
-        const uniqueResults = [];
-        const seenTipos = new Set();
+        // Calcular o número da última página
+        const lastPage = Math.ceil(totalCount / itemsPerPage);
 
-        for (const folowup of folowups) {
-            const tipo = folowup.cadimov?.tipo;
-            if (tipo && !seenTipos.has(tipo)) {
-                seenTipos.add(tipo);
-                uniqueResults.push({
-                    contrato: folowup.contrato,
-                    codend: folowup.codend,
-                    tipo: tipo,
-                });
-            }
-        }
-
-        //console.log('Unique results:', uniqueResults);
-        return uniqueResults;
+        return {
+            folowups,
+            pagination: {
+                totalItems: totalCount,
+                currentPage: page,
+                itemsPerPage: itemsPerPage,
+                lastPage: lastPage,
+            },
+        };
     }
 
     async getServicosGerenteUnidadeFiltros(
