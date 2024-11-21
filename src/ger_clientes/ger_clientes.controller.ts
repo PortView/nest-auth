@@ -1,17 +1,20 @@
 import { Controller, Get, ParseBoolPipe, Query } from '@nestjs/common';
 import { GerClientesService } from './ger_clientes.service';
 import { error } from 'console';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('ger-clientes')
 export class GerClientesController {
 
     constructor(private readonly gerClientesService: GerClientesService) { }
 
+    @ApiBearerAuth()
     @Get('olaMundo')
     async olaMundo(): Promise<{ message: string }> {
-        return { message: "Olá mundo versão 00021 !" };
+        return { message: "Olá mundo versão 00022 !" };
     }
 
+    @ApiBearerAuth()
     @Get('conformidades')
     async getConformidades(@Query('codimov') codimov: string, @Query('web') web: string, @Query('relatorio') relatorio: string) {
         //console.log(codimov, web, relatorio);
@@ -26,6 +29,7 @@ export class GerClientesController {
         return this.gerClientesService.getConformByUnidade(qcodimovNumber, webBool, relatorioBool);
     }
 
+    @ApiBearerAuth()
     @Get("tarefas")
     async getTarefas(@Query('codserv') codserv: string) {
         const qcodservNumber = parseInt(codserv, 10);
@@ -35,6 +39,7 @@ export class GerClientesController {
         return this.gerClientesService.getTarefas(qcodservNumber);
     }
 
+    @ApiBearerAuth()
     @Get('get-proc-ufs')
     async getUfs(@Query('codcoor') codcoor: string, @Query('codcli') codcli: string) {
         const codcoorNumber = parseInt(codcoor, 10);
@@ -45,7 +50,7 @@ export class GerClientesController {
         return this.gerClientesService.getUfsByCodcoorAndCodcli(codcoorNumber, codcliNumber);
     }
 
-
+    @ApiBearerAuth()
     @Get("clientes")
     async getClientes(@Query('codcoor') codcoor: string) {
         const codcoorNumber = parseInt(codcoor, 10);
@@ -55,6 +60,7 @@ export class GerClientesController {
         return this.gerClientesService.getClientesWithUfsByCodcoor(codcoorNumber);
     }
 
+    @ApiBearerAuth()
     @Get('unidades')
     async getUnidades(@Query('codcoor') codcoor: string, @Query('uf') uf: string, @Query('codcli') codcli: string, @Query('page') page: string) {
         const codcoorNumber = parseInt(codcoor, 10);
@@ -65,6 +71,8 @@ export class GerClientesController {
         }
         return this.gerClientesService.getUnidadesByCodcoorAndUf(codcoorNumber, uf, codcliNumber, pageNumber);
     }
+
+    @ApiBearerAuth()
     @Get('servicos')
     async getServicosGerenteUnidadeFiltros(
         @Query('qcodCoor') qcodCoor: string,
