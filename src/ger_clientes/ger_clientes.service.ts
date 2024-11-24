@@ -311,97 +311,190 @@ export class GerClientesService {
         };
     }
 
-    async getServicosGerenteUnidadeFiltros(
-        qcodCoor: number = 1310,
-        qcontrato: number = 4390,
-        qUnidade: number = 4323,
+
+    //#  Teste para serviços com filtros
+    async getServicosFiltro(
+        qCodCoor: number = 110,
         qConcluido: boolean = false,
-        qCodServ: number = -1,
-        qStatus: string = 'ALL',
-        qDtlimite: Date = new Date('2001-01-01')
-    ) {
+        qCodContra: number = 21972,
+        qCodEnd: number = 22769,
+    ): Promise<any> {
+        const folowup = await this.prisma.folowup.findMany({
+            where: {
+                codcoor: qCodCoor,
+                cad_contra: {
+                    concluido: qConcluido,
+                    codcontra: qCodContra,
+                    codend: qCodEnd,
+                },
+            },
+            select: {
+                tetramitacao: true,
+                teassessoria: true,
+                cad_contra: {
+                    select: {
+                        cod: true,
+                        codcontra: true,
+                        codend: true,
+                        cod_serv: true,
+                        m_status: true,
+                        dt_limite: true,
+                        ddescserv: true,
+                    },
+                },
+            },
+            distinct: ['codccontra'],
+            orderBy: {
+                cad_contra: {
+                    cod: 'asc',
+                },
+            },
+        });
+
+        const result = folowup.map(f => ({
+            servico: f.cad_contra.cod,
+            codcontra: f.cad_contra.codcontra,
+            codend: f.cad_contra.codend,
+            descserv: `${f.cad_contra.cod} - ${f.cad_contra.ddescserv.trim()}`,
+            cod_serv: f.cad_contra.cod_serv,
+            m_status: f.cad_contra.m_status,
+            dt_limite: f.cad_contra.dt_limite,
+            dt_limiteS: f.cad_contra.dt_limite ? f.cad_contra.dt_limite.toISOString().split('T')[0] : null,
+        }));
+
+        return result;
+    }
+
+    // # Serviços com filtros old
+    async getServicosGerenteUnidadeFiltros(
+        qcodCoor: number,// = 110,
+        qcontrato: number,// = 21792,
+        qUnidade: number,// = 22769,
+        qConcluido: boolean,// = false,
+        qCodServ: number,// = -1,
+        qStatus: string,// = 'ALL',
+        qDtlimite: Date,// = new Date('2001-01-01')
+    ): Promise<any> {
+
         const folowups = await this.prisma.folowup.findMany({
             where: {
                 codcoor: qcodCoor,
                 contrato: qcontrato,
+                codend: qUnidade,
+                cad_contra: {
+                    concluido: qConcluido,
+                    cod_serv: qCodServ === -1 ? undefined : qCodServ,
+                    m_status: qStatus === 'ALL' ? undefined : qStatus,
+                    dt_limite: {
+                        gte: qDtlimite === null ? new Date('2001-01-01') : qDtlimite,
+                    },
+                },
             },
+
             select: {
                 codccontra: true,
+                codend: true,
+                descserv: true,
                 tetramitacao: true,
                 teassessoria: true,
-            },
-        });
-
-        const cadContra = await this.prisma.cad_contra.findMany({
-            where: {
-                codend: qUnidade,
-                concluido: qConcluido ? true : undefined,
-                cod_serv: qCodServ !== -1 ? qCodServ : undefined,
-                m_status: qStatus !== 'ALL' ? qStatus : undefined,
-            },
-            include: {
-                cadimov: {
+                cadimov: true,
+                //cad_contra: true,
+                cad_contra: {
                     select: {
-                        tipo: true,
+                        cod_serv: true,
+                        codcontra: true,
+                        m_status: true,
+                        dt_limite: true,
+                        ddescserv: true,
+                        concluido: true,
+                        rescisao: true,
+                        suspenso: true,
+                        valserv: true,
+                        valameni: true,
+                        pendencias: true,
+                        obs_serv: true,
+                        novo: true,
+                        produto: true,
+                        filtro_os: true,
+                        obsresci: true,
+                        sinal: true,
+                        servnf: true,
+                        teventserv: true,
+                        revisao: true,
+                        e_controle: true,
+                        cnpj_conform: true,
+                        medicao: true,
+                        codstatusocorr: true,
+                        horasassessoria: true,
+                        horastramitacao: true,
                     },
                 },
-                pendencias: {
-                    select: {
-                        pendente: true,
+            },
+
+            distinct: ['codccontra'],
+            orderBy: [
+                {
+                    codccontra: 'asc',
+                },
+                {
+                    cad_contra: {
+                        concluido: 'asc',
                     },
                 },
-            },
+                {
+                    cad_contra: {
+                        cod_serv: 'asc',
+                    },
+                },
+            ],
         });
 
-        const results = cadContra.map(c => {
-            const folow = folowups.find(f => f.codccontra === c.cod);
-            return {
-                cod: c.cod,
-                codcontra: c.codcontra,
-                codend: c.codend,
-                tipo: c.cadimov?.tipo,
-                descserv: `${c.cod} - ${c.obs_serv}`,  // Assuming `obs_serv` is used for description
-                cod_serv: c.cod_serv,
-                rescisao: c.rescisao ?? false,
-                suspenso: c.suspenso ?? false,
-                dt_limiteS: c.dt_limite ? c.dt_limite.toISOString().split('T')[0] : null,
-                dt_limite: c.dt_limite,
-                m_status: c.m_status,
-                valserv: c.valserv,
-                valameni: c.valameni,
-                obs_serv: c.obs_serv,
-                novo: c.novo ?? false,
-                produto: c.produto,
-                filtro_os: c.filtro_os ?? false,
-                obsresci: c.obsresci,
-                sinal: c.sinal ?? false,
-                codccontra: c.cod,
-                servnf: c.servnf ?? false,
-                concluido: c.concluido ?? false,
-                teventserv: c.teventserv ?? false,
-                Xdt_limite: c.dt_limite,
-                revisao: c.revisao ?? false,
-                e_controle: c.e_controle,
-                pendente: c.pendencias?.[0]?.pendente ?? false,
-                qtd_pende: c.pendencias?.length ?? 0,
-                cnpj_conform: c.cnpj_conform,
-                medicao: c.medicao ?? false,
-                codstatusocorr: c.codstatusocorr,
-                horasassessoria: c.horasassessoria,
-                horastramitacao: c.horastramitacao,
-                horasassessoriaS: '',
-                horastramitacaoS: '',
-                tetramitacao: folow ? folow.tetramitacao : 0,
-                teassessoria: folow ? folow.teassessoria : 0,
-            };
-        });
+        const results = folowups.map(f => ({
+            codccontra: f.codccontra,
+            contrato: f.cad_contra?.codcontra,
+            codend: f.codend,
+            tipo: f.cadimov?.tipo,
+            descserv: `${f.codccontra} - ${f.descserv?.trim()}`,
+            cod_serv: f.cad_contra?.cod_serv,
+            rescisao: f.cad_contra?.rescisao,
+            suspenso: f.cad_contra?.suspenso,
+            dt_limite: f.cad_contra?.dt_limite,
+            dt_limiteS: f.cad_contra?.dt_limite ? f.cad_contra?.dt_limite.toISOString().split('T')[0] : null,
+            m_status: f.cad_contra.m_status,
+            valserv: f.cad_contra.valserv,
+            valameni: f.cad_contra.valameni,
+            obs_serv: f.cad_contra.obs_serv,
+            novo: f.cad_contra.novo ?? false,
+            produto: f.cad_contra.produto,
+            filtro_os: f.cad_contra.filtro_os ?? false,
+            obsresci: f.cad_contra.obsresci,
+            sinal: f.cad_contra.sinal ?? false,
+            servnf: f.cad_contra.servnf ?? false,
+            concluido: f.cad_contra.concluido ?? false,
+            teventserv: f.cad_contra.teventserv ?? false,
+            Xdt_limite: f.cad_contra.dt_limite,
+            revisao: f.cad_contra.revisao ?? false,
+            e_controle: f.cad_contra.e_controle,
+            pendente: f.cad_contra.pendencias?.[0]?.pendente ?? false,
+            qtd_pende: f.cad_contra.pendencias?.length ?? 0,
+            cnpj_conform: f.cad_contra.cnpj_conform,
+            medicao: f.cad_contra.medicao ?? false,
+            codstatusocorr: f.cad_contra.codstatusocorr,
+            tetramitacao: f.tetramitacao,
+            teassessoria: f.teassessoria,
+            horasassessoria: f.cad_contra.horasassessoria,
+            horastramitacao: f.cad_contra.horastramitacao,
+        }));
 
-        // Ordenar os resultados
-        results.sort((a, b) => {
-            if (a.concluido !== b.concluido) return a.concluido ? 1 : -1;
-            if (a.cod_serv !== b.cod_serv) return a.cod_serv - b.cod_serv;
-            return a.cod - b.cod;
-        });
+        // results.sort((a, b) => {
+        //     if (a.concluido !== b.concluido) {
+        //         return a.concluido ? 1 : -1;
+        //     }
+        //     if (a.cod_serv !== b.cod_serv) {
+        //         return a.cod_serv - b.cod_serv;
+        //     }
+        //     return a.codccontra - b.codccontra;
+        // });
 
         return results;
     }

@@ -105,4 +105,10 @@ export class GerClientesController {
         );
     }
 
+    @ApiBearerAuth()
+    @Get('servicosx')
+    async getServicosFiltro() {
+        return this.gerClientesService.getServicosFiltro();
+    };
+
 }
