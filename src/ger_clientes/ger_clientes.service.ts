@@ -464,7 +464,7 @@ export class GerClientesService {
             //dtLimite: f.cad_contra?.dt_limite ? f.cad_contra.dt_limite: undefined,
             //dtLimite: f.cad_contra?.dt_limite ? format(new Date(f.cad_contra.dt_limite), 'dd-MM-yyyy HH:mm') : undefined, // Formata a data
 
-            dtLimite: f.cad_contra?.dt_limite ? format(new Date(f.cad_contra.dt_limite.getTime() + (3 * 60 * 60 * 1000)), 'dd-MM-yyyy') : undefined,
+            dtLimite: f.cad_contra?.dt_limite ? format(new Date(f.cad_contra.dt_limite.getTime() + (3 * 60 * 60 * 1000)), 'dd-MM-yyyy hh:mm') : undefined,
             dtLimiteS: f.cad_contra?.dt_limite ? format(new Date(f.cad_contra.dt_limite.getTime() + (3 * 60 * 60 * 1000)), 'dd-MM-yyyy').toString() : undefined,
             mStatus: f.cad_contra.m_status,
             valserv: f.cad_contra.valserv,
