@@ -223,7 +223,7 @@ model cad_contra {
   acumulahoras2     Int
   concluido         Boolean
   revisao           Boolean
-  dt_limite         DateTime?    @db.Date
+  dt_limite         DateTime?
   produto           String       @db.Char(1)
   cod_serv          Int
   num_processo      String?      @db.VarChar(50)

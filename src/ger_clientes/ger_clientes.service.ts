@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
+import { formatToTimeZone } from 'date-fns-timezone';
 import { PrismaService } from 'src/db/prisma.service';
+//import { format } from 'date-fns';
+import { format, toZonedTime } from 'date-fns-tz';
 
 @Injectable()
 export class GerClientesService {
@@ -458,8 +461,11 @@ export class GerClientesService {
             codServ: f.cad_contra?.cod_serv,
             rescisao: f.cad_contra?.rescisao,
             suspenso: f.cad_contra?.suspenso,
-            dtLimite: f.cad_contra?.dt_limite,
-            dtLimiteS: f.cad_contra?.dt_limite ? f.cad_contra?.dt_limite.toISOString().split('T')[0] : null,
+            //dtLimite: f.cad_contra?.dt_limite ? f.cad_contra.dt_limite: undefined,
+            //dtLimite: f.cad_contra?.dt_limite ? format(new Date(f.cad_contra.dt_limite), 'dd-MM-yyyy HH:mm') : undefined, // Formata a data
+
+            dtLimite: f.cad_contra?.dt_limite ? format(new Date(f.cad_contra.dt_limite.getTime() + (3 * 60 * 60 * 1000)), 'dd-MM-yyyy') : undefined,
+            dtLimiteS: f.cad_contra?.dt_limite ? format(new Date(f.cad_contra.dt_limite.getTime() + (3 * 60 * 60 * 1000)), 'dd-MM-yyyy').toString() : undefined,
             mStatus: f.cad_contra.m_status,
             valserv: f.cad_contra.valserv,
             valameni: f.cad_contra.valameni,
@@ -558,4 +564,52 @@ export class GerClientesService {
         return processedTarefas;
     }
 
+}// Add this function to format the date and time
+function formatDateTime(date: Date): string {
+    // Options for formatting date and time in Brasília time zone
+    const optionsDate: Intl.DateTimeFormatOptions = {
+        timeZone: 'America/Sao_Paulo', // Brasília time zone
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+    };
+    const optionsTime: Intl.DateTimeFormatOptions = {
+        timeZone: 'America/Sao_Paulo',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true,
+    };
+
+    // Format date and time parts separately
+    const datePart = new Intl.DateTimeFormat('en-CA', optionsDate).format(date); // 'YYYY-MM-DD'
+    const timePart = new Intl.DateTimeFormat('en-US', optionsTime).format(date); // 'HH:MM AM/PM'
+
+    return `${datePart} ${timePart}`;
 }
+
+// Function to format the date and time using UTC methods
+function formatDateTimeUTC(dateString: string): string {
+    const date = new Date(dateString);
+
+    // Get UTC components to avoid time zone conversions
+    const year = date.getUTCFullYear();
+    const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+    const day = String(date.getUTCDate()).padStart(2, '0');
+
+    let hours = date.getUTCHours();
+    const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+
+    // Convert hours to 12-hour format
+    hours = hours % 12;
+    hours = hours ? hours : 12; // Adjust for midnight (0 hours)
+    const formattedHours = String(hours).padStart(2, '0');
+
+    return `${year}-${month}-${day} ${formattedHours}:${minutes} ${ampm}`;
+}
+
+// import { formatToTimeZone } from 'date-fns-timezone';
+
+// dtLimite: f.cad_contra?.dt_limite
+//   ? formatToTimeZone(new Date(f.cad_contra.dt_limite), 'YYYY-MM-DD hh:mm A', { timeZone: 'America/Sao_Paulo' })
+//   : undefined;
