@@ -461,11 +461,11 @@ export class GerClientesService {
             codServ: f.cad_contra?.cod_serv,
             rescisao: f.cad_contra?.rescisao,
             suspenso: f.cad_contra?.suspenso,
-            //dtLimite: f.cad_contra?.dt_limite ? f.cad_contra.dt_limite: undefined,
+            dtLimite: f.cad_contra?.dt_limite ? f.cad_contra.dt_limite : undefined,
+            dt_limiteS: f.cad_contra.dt_limite ? f.cad_contra.dt_limite.toISOString().split('T')[0] : null,
             //dtLimite: f.cad_contra?.dt_limite ? format(new Date(f.cad_contra.dt_limite), 'dd-MM-yyyy HH:mm') : undefined, // Formata a data
-
-            dtLimite: f.cad_contra?.dt_limite ? format(new Date(f.cad_contra.dt_limite.getTime() + (3 * 60 * 60 * 1000)), 'dd-MM-yyyy hh:mm') : undefined,
-            dtLimiteS: f.cad_contra?.dt_limite ? format(new Date(f.cad_contra.dt_limite.getTime() + (3 * 60 * 60 * 1000)), 'dd-MM-yyyy').toString() : undefined,
+            //dtLimite: f.cad_contra?.dt_limite ? format(new Date(f.cad_contra.dt_limite.getTime() + (3 * 60 * 60 * 1000)), 'dd-MM-yyyy hh:mm') : undefined,
+            //dtLimiteS: f.cad_contra?.dt_limite ? format(new Date(f.cad_contra.dt_limite.getTime() + (3 * 60 * 60 * 1000)), 'dd-MM-yyyy').toString() : undefined,
             mStatus: f.cad_contra.m_status,
             valserv: f.cad_contra.valserv,
             valameni: f.cad_contra.valameni,
