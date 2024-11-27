@@ -84,14 +84,27 @@ export class GerClientesService {
         // const baseQuery = `SELECT cod, codimov, codcfor, dt, f_internet, f_relatorio
         //         FROM modulo.cad_conform WHERE codimov = \$1`;
 
-        const baseQuery = `SELECT modulo.cad_conform.cod, modulo.cad_conform.codimov, modulo.cad_conform.codcfor, modulo.cad_conform.descr, modulo.cad_conform.doc, modulo.cad_conform.area, modulo.cad_conform.dt, modulo.cad_conform.dtvenc, 
-        modulo.cad_conform.providencia, modulo.cad_conform.quando, modulo.cad_conform.quem, modulo.cad_conform.grupo, modulo.cad_conform.atividade, modulo.cad_conform.docscanv, modulo.cad_conform.docscani, modulo.cad_conform.qtdedoc, 
-        modulo.cad_conform.qlocal, modulo.cad_conform.f_internet, modulo.cad_conform.terceiros, modulo.cad_conform.cad, modulo.cad_conform.arq_morto, modulo.cad_conform.cnpj_conform, modulo.cad_conform.old_cnpj, modulo.cad_conform.periodocidade, 
-        modulo.cad_conform.grau_risco, modulo.cad_conform.obs, modulo.cad_conform.f_relatorio, modulo.cad_conform.dt_renov, modulo.cad_conform.f_obs, modulo.cad_conform.cod_gp_depto, modulo.cad_conform.v_grau_risco, modulo.cad_conform.val_trib, 
-        modulo.cad_conform.doc_original, modulo.cad_conform.dt_doc_original, modulo.cad_conform.codusu_doc_orig, modulo.cad_conform.doc_original_ok, modulo.cad_conform.dt_doc_original_ok, modulo.cad_conform.codusu_doc_orig_ok, 
-        modulo.cad_conform.dt_ins, modulo.cad_conform.doc_permanente, modulo.cad_conform.statusconform, modulo.cad_conform.dtstatusconform, modulo.cad_conform.codstatusconform, modulo.cad_conform.orgao_publico, 
-        modulo.cad_conform.orientacao, modulo.cad_conform.gestao_cli, modulo.cad_conform.respons_terceiro, modulo.cad_conform.dt_recebe, modulo.cad_conform.dt_input, modulo.cad_conform.flag_tipopdf, modulo.grupo_cod_serv.sub_descr, 
-        modulo.grupo_cod_serv.aba01
+        const baseQuery = `SELECT modulo.cad_conform.cod, modulo.cad_conform.codimov, modulo.cad_conform.codcfor, 
+        modulo.cad_conform.descr, modulo.cad_conform.doc, modulo.cad_conform.area, modulo.cad_conform.dt, 
+        modulo.cad_conform.dtvenc, modulo.cad_conform.providencia, modulo.cad_conform.quando, modulo.cad_conform.quem, 
+        modulo.cad_conform.grupo, modulo.cad_conform.atividade, modulo.cad_conform.docscanv, modulo.cad_conform.docscani, 
+        modulo.cad_conform.qtdedoc, modulo.cad_conform.qlocal, modulo.cad_conform.f_internet finternet, modulo.cad_conform.terceiros, 
+        modulo.cad_conform.cad, modulo.cad_conform.arq_morto arqmorto, modulo.cad_conform.cnpj_conform cnpjconform, 
+        modulo.cad_conform.old_cnpj oldcnpj, modulo.cad_conform.periodocidade, modulo.cad_conform.grau_risco graurisco
+        , 
+        modulo.cad_conform.obs, modulo.cad_conform.f_relatorio frelatorio, modulo.cad_conform.dt_renov dtrenov, 
+        modulo.cad_conform.f_obs fobs, modulo.cad_conform.cod_gp_depto codgpdepto, modulo.cad_conform.v_grau_risco vgraurisco, 
+        modulo.cad_conform.val_trib valtrib, modulo.cad_conform.doc_original docoriginal, modulo.cad_conform.dt_doc_original dtdocoriginal, 
+        modulo.cad_conform.codusu_doc_orig codusudocorig, modulo.cad_conform.doc_original_ok docoriginalok, 
+        modulo.cad_conform.dt_doc_original_ok dtdocoriginalok, modulo.cad_conform.codusu_doc_orig_ok codusudocorigok
+        , 
+        modulo.cad_conform.dt_ins dtins, modulo.cad_conform.doc_permanente docpermanente, modulo.cad_conform.statusconform, 
+        modulo.cad_conform.dtstatusconform, modulo.cad_conform.codstatusconform, modulo.cad_conform.orgao_publico orgaopublico, 
+        modulo.cad_conform.orientacao, modulo.cad_conform.gestao_cli gestaocli, modulo.cad_conform.respons_terceiro responsterceiro, 
+        modulo.cad_conform.dt_recebe dtrecebe, modulo.cad_conform.dt_input dtinput, modulo.cad_conform.flag_tipopdf flagtipopdf, 
+        modulo.grupo_cod_serv.sub_descr subdescr, modulo.grupo_cod_serv.aba01
+        
+
         FROM modulo.cod_serv LEFT OUTER JOIN
         modulo.grupo_cod_serv ON modulo.cod_serv.cod_grupo = modulo.grupo_cod_serv.cod_grupo RIGHT OUTER JOIN
         modulo.cad_conform ON modulo.cod_serv.cod = modulo.cad_conform.codcfor
@@ -114,17 +127,6 @@ export class GerClientesService {
         }
 
         fullQuery = `${baseQuery} ${fullQuery} ORDER BY codcfor ASC, dt ASC NULLS FIRST`;
-
-        // const fullQuery = web === false
-        //     ? `${baseQuery} ORDER BY codcfor ASC, dt ASC NULLS FIRST`
-        //     : `${baseQuery} AND f_internet = true ORDER BY codcfor ASC, dt ASC NULLS FIRST`;
-
-        // const fullQuery2 = rel === false
-        //     ? `${baseQuery} ORDER BY codcfor ASC, dt ASC NULLS FIRST`
-        //     : `${baseQuery} AND f_internet = true ORDER BY codcfor ASC, dt ASC NULLS FIRST`;
-        // console.log('Param Web:', web);
-        // console.log('Param Rel:', rel);
-        // console.log('Full query:', fullQuery);
 
         const result = await this.prisma.$queryRawUnsafe(fullQuery, codimov);
         return result;
