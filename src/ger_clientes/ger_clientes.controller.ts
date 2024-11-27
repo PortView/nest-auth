@@ -2,6 +2,7 @@ import { Controller, Get, ParseBoolPipe, Query } from '@nestjs/common';
 import { GerClientesService } from './ger_clientes.service';
 import { error } from 'console';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { IsPublic } from 'src/auth/decorators/is-public.decorator';
 
 @Controller('ger-clientes')
 export class GerClientesController {
@@ -14,19 +15,21 @@ export class GerClientesController {
         return { message: "Olá mundo versão 00022 !" };
     }
 
+    //@IsPublic()
     @ApiBearerAuth()
     @Get('conformidades')
-    async getConformidades(@Query('codimov') codimov: string, @Query('web') web: string, @Query('relatorio') relatorio: string) {
+    async getConformidades(@Query('codimov') codimov: string, @Query('web') web: string, @Query('relatorio') relatorio: string, @Query('cnpj') cnpj: string, @Query('temcnpj') temcnpj: string) {
         //console.log(codimov, web, relatorio);
         const qcodimovNumber = parseInt(codimov, 10);
         const webBool = web === "true" || web === "1"; // se true mostra todos os reg.
-        const relatorioBool = relatorio === 'true' || web === '1';
+        const relatorioBool = relatorio === 'true' || relatorio === '1';
+        const temcnpjBool = temcnpj === 'true' || temcnpj === '1';
 
         if (isNaN(qcodimovNumber)) {
             throw new Error('Invalid parameters');
         }
         //console.log(qcodimovNumber, webBool, relatorioBool);
-        return this.gerClientesService.getConformByUnidade(qcodimovNumber, webBool, relatorioBool);
+        return this.gerClientesService.getConformByUnidade(qcodimovNumber, webBool, relatorioBool, cnpj, temcnpjBool);
     }
 
     @ApiBearerAuth()

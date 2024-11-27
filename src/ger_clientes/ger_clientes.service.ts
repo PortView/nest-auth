@@ -79,9 +79,59 @@ export class GerClientesService {
     //     return result;
     // }
 
+    async getConformByUnidade(codimov: number, web: boolean, rel: boolean, cnpj: string, temcnpj: boolean) {
 
+        // const baseQuery = `SELECT cod, codimov, codcfor, dt, f_internet, f_relatorio
+        //         FROM modulo.cad_conform WHERE codimov = \$1`;
 
-    async getConformByUnidade(codimov: number, web: boolean, rel: boolean) {
+        const baseQuery = `SELECT modulo.cad_conform.cod, modulo.cad_conform.codimov, modulo.cad_conform.codcfor, modulo.cad_conform.descr, modulo.cad_conform.doc, modulo.cad_conform.area, modulo.cad_conform.dt, modulo.cad_conform.dtvenc, 
+        modulo.cad_conform.providencia, modulo.cad_conform.quando, modulo.cad_conform.quem, modulo.cad_conform.grupo, modulo.cad_conform.atividade, modulo.cad_conform.docscanv, modulo.cad_conform.docscani, modulo.cad_conform.qtdedoc, 
+        modulo.cad_conform.qlocal, modulo.cad_conform.f_internet, modulo.cad_conform.terceiros, modulo.cad_conform.cad, modulo.cad_conform.arq_morto, modulo.cad_conform.cnpj_conform, modulo.cad_conform.old_cnpj, modulo.cad_conform.periodocidade, 
+        modulo.cad_conform.grau_risco, modulo.cad_conform.obs, modulo.cad_conform.f_relatorio, modulo.cad_conform.dt_renov, modulo.cad_conform.f_obs, modulo.cad_conform.cod_gp_depto, modulo.cad_conform.v_grau_risco, modulo.cad_conform.val_trib, 
+        modulo.cad_conform.doc_original, modulo.cad_conform.dt_doc_original, modulo.cad_conform.codusu_doc_orig, modulo.cad_conform.doc_original_ok, modulo.cad_conform.dt_doc_original_ok, modulo.cad_conform.codusu_doc_orig_ok, 
+        modulo.cad_conform.dt_ins, modulo.cad_conform.doc_permanente, modulo.cad_conform.statusconform, modulo.cad_conform.dtstatusconform, modulo.cad_conform.codstatusconform, modulo.cad_conform.orgao_publico, 
+        modulo.cad_conform.orientacao, modulo.cad_conform.gestao_cli, modulo.cad_conform.respons_terceiro, modulo.cad_conform.dt_recebe, modulo.cad_conform.dt_input, modulo.cad_conform.flag_tipopdf, modulo.grupo_cod_serv.sub_descr, 
+        modulo.grupo_cod_serv.aba01
+        FROM modulo.cod_serv LEFT OUTER JOIN
+        modulo.grupo_cod_serv ON modulo.cod_serv.cod_grupo = modulo.grupo_cod_serv.cod_grupo RIGHT OUTER JOIN
+        modulo.cad_conform ON modulo.cod_serv.cod = modulo.cad_conform.codcfor
+        WHERE modulo.cad_conform.codimov = \$1`
+
+        var fullQuery = "";
+
+        if (web === false) {
+            fullQuery = ` and f_internet = true`;
+        }
+        if (rel === true) {
+            fullQuery += ` and f_relatorio = true`;
+        }
+
+        if (temcnpj === true) {
+            fullQuery += ` and cnpj_conform = '${cnpj}'`;
+        }
+        else {
+            fullQuery += ` and cnpj_conform isnull`;
+        }
+
+        fullQuery = `${baseQuery} ${fullQuery} ORDER BY codcfor ASC, dt ASC NULLS FIRST`;
+
+        // const fullQuery = web === false
+        //     ? `${baseQuery} ORDER BY codcfor ASC, dt ASC NULLS FIRST`
+        //     : `${baseQuery} AND f_internet = true ORDER BY codcfor ASC, dt ASC NULLS FIRST`;
+
+        // const fullQuery2 = rel === false
+        //     ? `${baseQuery} ORDER BY codcfor ASC, dt ASC NULLS FIRST`
+        //     : `${baseQuery} AND f_internet = true ORDER BY codcfor ASC, dt ASC NULLS FIRST`;
+        // console.log('Param Web:', web);
+        // console.log('Param Rel:', rel);
+        // console.log('Full query:', fullQuery);
+
+        const result = await this.prisma.$queryRawUnsafe(fullQuery, codimov);
+        return result;
+
+    }
+
+    async getConformByUnidadeOld(codimov: number, web: boolean, rel: boolean) {
 
         const baseQuery = `SELECT cod, codimov, codcfor, dt, f_internet, f_relatorio
                 FROM modulo.cad_conform WHERE codimov = \$1`;
@@ -467,8 +517,8 @@ export class GerClientesService {
             //dtLimite: f.cad_contra?.dt_limite ? format(new Date(f.cad_contra.dt_limite.getTime() + (3 * 60 * 60 * 1000)), 'dd-MM-yyyy hh:mm') : undefined,
             //dtLimiteS: f.cad_contra?.dt_limite ? format(new Date(f.cad_contra.dt_limite.getTime() + (3 * 60 * 60 * 1000)), 'dd-MM-yyyy').toString() : undefined,
             mStatus: f.cad_contra.m_status,
-            valserv: f.cad_contra.valserv,
-            valameni: f.cad_contra.valameni,
+            valserv: f.cad_contra?.valserv ? f.cad_contra.valserv : 0.00,
+            valameni: f.cad_contra.valameni ? f.cad_contra.valameni : 0.00,
             obsServ: f.cad_contra.obs_serv,
             novo: f.cad_contra.novo ?? false,
             produto: f.cad_contra.produto,
