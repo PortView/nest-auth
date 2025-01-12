@@ -339,14 +339,16 @@ export class GerClientesService {
                 cadimov: {
                     select: {
                         tipo: true,
+                        uf: true,
                     },
                 },
             },
-            orderBy: {
-                cadimov: {
-                    tipo: 'asc',
-                },
-            },
+            // orderBy: {
+            //     cadimov: {
+            //         uf: 'asc',
+            //         tipo: 'asc',
+            //     },
+            // },
             distinct: ['codend'],
             take: itemsPerPage,
             skip: skip,
