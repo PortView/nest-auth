@@ -223,7 +223,7 @@ model cad_contra {
   acumulahoras2     Int
   concluido         Boolean
   revisao           Boolean
-  dt_limite         DateTime?
+  dt_limite         DateTime?    @db.Date
   produto           String       @db.Char(1)
   cod_serv          Int
   num_processo      String?      @db.VarChar(50)
@@ -819,4 +819,41 @@ model pendencias {
   cad_contra       cad_contra @relation(fields: [codccontra], references: [cod], onDelete: NoAction, onUpdate: NoAction, map: "cad_contra_ref")
 
   @@index([codccontra])
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model cod_serv {
+  id_cod_serv  Decimal? @db.Decimal(18, 0)
+  cod_grupo    Int
+  cod          Int
+  descr        String?  @db.VarChar(50)
+  produto      Int      @db.SmallInt
+  ativo        String   @db.Bit(1)
+  competencia  String?  @db.VarChar(1)
+  shop         String   @db.Bit(1)
+  cod_controle String?  @db.VarChar(14)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model grupo_cod_serv {
+  cod_grupo   Int
+  descr       String? @db.VarChar(100)
+  sub_descr   String? @db.VarChar(3)
+  cod_cli     Int?
+  senha       String? @db.VarChar(15)
+  filtro_conf String  @db.Bit(1)
+  aba01       String  @db.Bit(1)
+  aba02       String  @db.Bit(1)
+  aba03       String  @db.Bit(1)
+  aba04       String  @db.Bit(1)
+  aba05       String  @db.Bit(1)
+  aba06       String  @db.Bit(1)
+  aba07       String  @db.Bit(1)
+  aba08       String  @db.Bit(1)
+  aba09       String  @db.Bit(1)
+  aba10       String  @db.Bit(1)
+
+  @@ignore
 }
