@@ -445,7 +445,6 @@ export class GerClientesService {
                     dt_limite: qDtlimite === 'ALL' ? undefined : new Date(qDtlimite),
                 },
             },
-
             select: {
                 codccontra: true,
                 codend: true,
