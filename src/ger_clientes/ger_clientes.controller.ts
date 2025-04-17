@@ -91,9 +91,9 @@ export class GerClientesController {
         const qUnidadeNumber = parseInt(qUnidade, 10);
         const qConcluidoBool = qConcluido === 'true';
         const qCodServNumber = parseInt(qCodServ, 10);
-        const qDtlimiteDate = new Date(qDtlimite);
+        const qDtlimiteDate = qDtlimite;
 
-        if (isNaN(qcodCoorNumber) || isNaN(qcontratoNumber) || isNaN(qUnidadeNumber) || isNaN(qCodServNumber) || isNaN(qDtlimiteDate.getTime())) {
+        if (isNaN(qcodCoorNumber) || isNaN(qcontratoNumber) || isNaN(qUnidadeNumber) || isNaN(qCodServNumber)) {
             throw new Error('Invalid parameters');
         }
 

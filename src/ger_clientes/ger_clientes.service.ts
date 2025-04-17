@@ -430,7 +430,7 @@ export class GerClientesService {
         qConcluido: boolean,// = false,
         qCodServ: number,// = -1,
         qStatus: string,// = 'ALL',
-        qDtlimite: Date,// = new Date('2001-01-01')
+        qDtlimite: string,// = new Date('2001-01-01')
     ): Promise<any> {
 
         const folowups = await this.prisma.folowup.findMany({
@@ -439,12 +439,10 @@ export class GerClientesService {
                 contrato: qcontrato,
                 codend: qUnidade,
                 cad_contra: {
-                    concluido: qConcluido,
+                    concluido: qConcluido === true ? false : undefined,
                     cod_serv: qCodServ === -1 ? undefined : qCodServ,
                     m_status: qStatus === 'ALL' ? undefined : qStatus,
-                    dt_limite: {
-                        gte: qDtlimite === null ? new Date('2001-01-01') : qDtlimite,
-                    },
+                    dt_limite: qDtlimite === 'ALL' ? undefined : new Date(qDtlimite),
                 },
             },
 
@@ -491,18 +489,16 @@ export class GerClientesService {
             distinct: ['codccontra'],
             orderBy: [
                 {
-                    codccontra: 'asc',
-                },
-                {
-                    cad_contra: {
-                        concluido: 'asc',
-                    },
-                },
-                {
                     cad_contra: {
                         cod_serv: 'asc',
                     },
                 },
+
+                {
+                    cad_contra: {
+                        concluido: 'asc',
+                    },
+                }
             ],
         });
 
